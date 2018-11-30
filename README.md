@@ -1,2 +1,2 @@
 # DataStructures
-Review for interviews
+These data structures are ones I've come across during interviews. 
