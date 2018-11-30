@@ -1,6 +1,0 @@
-C:\Users\choo_\source\repos\DataStructures\Sorting\bin\Debug\Sorting.dll
-C:\Users\choo_\source\repos\DataStructures\Sorting\bin\Debug\Sorting.pdb
-C:\Users\choo_\source\repos\DataStructures\Sorting\obj\Debug\Sorting.csprojAssemblyReference.cache
-C:\Users\choo_\source\repos\DataStructures\Sorting\obj\Debug\Sorting.csproj.CoreCompileInputs.cache
-C:\Users\choo_\source\repos\DataStructures\Sorting\obj\Debug\Sorting.dll
-C:\Users\choo_\source\repos\DataStructures\Sorting\obj\Debug\Sorting.pdb

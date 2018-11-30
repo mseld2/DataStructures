@@ -1,6 +1,0 @@
-C:\Users\choo_\source\repos\DataStructures\Trees\bin\Debug\Trees.dll
-C:\Users\choo_\source\repos\DataStructures\Trees\bin\Debug\Trees.pdb
-C:\Users\choo_\source\repos\DataStructures\Trees\obj\Debug\Trees.csprojAssemblyReference.cache
-C:\Users\choo_\source\repos\DataStructures\Trees\obj\Debug\Trees.csproj.CoreCompileInputs.cache
-C:\Users\choo_\source\repos\DataStructures\Trees\obj\Debug\Trees.dll
-C:\Users\choo_\source\repos\DataStructures\Trees\obj\Debug\Trees.pdb

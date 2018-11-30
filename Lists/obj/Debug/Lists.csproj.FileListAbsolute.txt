@@ -1,6 +1,0 @@
-C:\Users\choo_\source\repos\DataStructures\Lists\bin\Debug\Lists.dll
-C:\Users\choo_\source\repos\DataStructures\Lists\bin\Debug\Lists.pdb
-C:\Users\choo_\source\repos\DataStructures\Lists\obj\Debug\Lists.csprojAssemblyReference.cache
-C:\Users\choo_\source\repos\DataStructures\Lists\obj\Debug\Lists.csproj.CoreCompileInputs.cache
-C:\Users\choo_\source\repos\DataStructures\Lists\obj\Debug\Lists.dll
-C:\Users\choo_\source\repos\DataStructures\Lists\obj\Debug\Lists.pdb

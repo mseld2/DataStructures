@@ -66,6 +66,77 @@ namespace UnitTests
             Assert.IsFalse(_tree.Find(27));
         }
 
+        [TestMethod]
+        public void Maximum()
+        {
+            Assert.AreEqual(18, _tree.Maximum());
+        }
+
+        [TestMethod]
+        public void Minimum()
+        {
+            Assert.AreEqual(1, _tree.Minimum());
+        }
+
+        [TestMethod]
+        public void RemoveRoot()
+        {
+            _tree.Remove(13);
+
+            _tree.Traverse(Accumulator);
+            List<int> expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 18 };
+
+            Assert.IsTrue(expected.SequenceEqual(_list));
+        }
+
+        [TestMethod]
+        public void RemoveMiddle()
+        {
+            _tree.Remove(12);
+
+            _tree.Traverse(Accumulator);
+            List<int> expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 18 };
+
+            Assert.IsTrue(expected.SequenceEqual(_list));
+
+        }
+
+        [TestMethod]
+        public void RemoveMinimum()
+        {
+            _tree.Remove(1);
+
+            _tree.Traverse(Accumulator);
+            List<int> expected = new List<int>() { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 18 };
+
+            Assert.IsTrue(expected.SequenceEqual(_list));
+
+        }
+
+        [TestMethod]
+        public void RemoveMaximum()
+        {
+            _tree.Remove(18);
+
+            _tree.Traverse(Accumulator);
+            List<int> expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+
+            Assert.IsTrue(expected.SequenceEqual(_list));
+
+        }
+
+        [TestMethod]
+        public void Size()
+        {
+            Assert.AreEqual(15, _tree.Size);
+        }
+
+        [TestMethod]
+        public void Height()
+        {
+            Assert.AreEqual(9, _tree.Height);
+        }
+
         private static void Accumulator(int value)
         {
             _list.Add(value);

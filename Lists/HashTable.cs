@@ -19,14 +19,13 @@ namespace Lists
             if (IsEmpty(index))
             {
                 _hashTable[index] = new LinkedList<Kvp<TKey, TVal>>();
-                _hashTable[index].InsertBack(kvp);
+                _hashTable[index].Add(kvp);
             }
             else
             {
-                LinkedListNode<Kvp<TKey, TVal>> item = _hashTable[index].Find(kvp);
-                if(item == default(LinkedListNode<Kvp<TKey, TVal>>))
+                if(_hashTable[index].IndexOf(kvp) < 0)
                 {
-                    _hashTable[index].InsertBack(kvp);
+                    _hashTable[index].Add(kvp);
                 }
             }
         }
@@ -40,10 +39,10 @@ namespace Lists
             }
 
             Kvp<TKey, TVal> kvp = new Kvp<TKey, TVal>(key);
-            LinkedListNode<Kvp<TKey, TVal>> item = _hashTable[index].Find(kvp);
-            if (item != default(LinkedListNode<Kvp<TKey, TVal>>))
+            int idx = _hashTable[index].IndexOf(kvp);
+            if (idx > -1)
             {
-                return item.Data.Value;
+                return _hashTable[index][idx].Value;
             }
 
             return default(TVal);
@@ -58,17 +57,10 @@ namespace Lists
             }
 
             Kvp<TKey, TVal> kvp = new Kvp<TKey, TVal>(key);
-            LinkedListNode<Kvp<TKey, TVal>> item = _hashTable[index].Find(kvp);
-            if (item != default(LinkedListNode<Kvp<TKey, TVal>>))
+            int idx = _hashTable[index].IndexOf(kvp);
+            if (idx > -1)
             {
-                if(item.Next == null)
-                {
-                    _hashTable[index].RemoveFront();
-                }
-                else
-                {
-                    _hashTable[index].RemoveBefore(item.Next);
-                }
+                _hashTable[index].RemoveAt(idx);
                
                 if(_hashTable[index].IsEmpty)
                 {

@@ -22,19 +22,22 @@ namespace Lists
         }
     }
 
-    // This uses front and back pointers. This makes it so all inserts
-    // and deletions are O(1) time.
+    // Double-linked list. 
     public class LinkedList<T> where T: IEquatable<T>
     {
         private LinkedListNode<T> _front;
         private LinkedListNode<T> _back;
 
-        public bool IsEmpty => Size == 0;
+        public bool IsEmpty => Count == 0;
     
-        public int Size { get; private set; }
+        public int Count { get; private set; }
 
-        // Time is O(1)
-        public void InsertFront(T data)
+        public T Front => _front != null ? _front.Data : default(T);
+
+        public T Back => _back != null ? _back.Data : default(T);
+
+        // O(1). Add item to front of list
+        public void Push(T data)
         {
             LinkedListNode<T> newNode = new LinkedListNode<T>(data);
             if (IsEmpty)
@@ -54,11 +57,11 @@ namespace Lists
                 _front = newNode;
             }
 
-            ++Size;
+            ++Count;
         }
 
-        // Time is O(1)
-        public void InsertBack(T data)
+        // O(1). Add item to end of list
+        public void Add(T data)
         {
             LinkedListNode<T> newNode = new LinkedListNode<T>(data);
             if (IsEmpty)
@@ -78,65 +81,18 @@ namespace Lists
                 _back = newNode;
             }
 
-            ++Size;
+            ++Count;
         }
 
-        // Time is O(1)
-        public void InsertBefore(T data, LinkedListNode<T> nextNode)
-        {
-            if(nextNode == null)
-            {
-                throw new ArgumentNullException("nextNode cannot be null");
-            }
-
-            LinkedListNode<T> newNode = new LinkedListNode<T>(data);
-            if((nextNode == _front && nextNode == _back) || nextNode == _front)
-            {
-                InsertFront(data);
-            }
-            else
-            {
-                newNode.Next = nextNode;
-                newNode.Previous = nextNode.Previous;
-                nextNode.Previous.Next = newNode;
-                nextNode.Previous = newNode;
-
-                ++Size;
-            }
-        }
-
-        // Time is O(1)
-        public void InsertAfter(T data, LinkedListNode<T> previousNode)
-        {
-            if (previousNode == null)
-            {
-                throw new ArgumentNullException("previousNode cannot be null");
-            }
-
-            LinkedListNode<T> newNode = new LinkedListNode<T>(data);
-            if ((previousNode == _front && previousNode == _back) || previousNode == _back)
-            {
-                InsertBack(data);
-            }
-            else
-            {
-                newNode.Previous = previousNode;
-                newNode.Next = previousNode.Next;
-                previousNode.Next.Previous = newNode;
-                previousNode.Next = newNode;
-
-                ++Size;
-            }
-        }
-
-        // Time is O(1)
-        public void RemoveFront()
+        // O(1). Remove first item from list
+        public T Pop()
         {
             if(IsEmpty)
             {
                 throw new Exception("Cannot remove from empty list");
             }
 
+            T value = _front.Data;
             if (_front == _back)
             {
                 _front = _back =  null;
@@ -147,17 +103,20 @@ namespace Lists
                 _front = _front.Previous;
             }
 
-            --Size;
+            --Count;
+
+            return value;
         }
 
-        // Time is O(1)
-        public void RemoveBack()
+        // O(1). Remove last item in list
+        public T RemoveLast()
         {
             if (IsEmpty)
             {
                 throw new Exception("Cannot remove from empty list");
             }
 
+            T value = _back.Data;
             if (_front == _back)
             {
                 _back = _front = null;
@@ -168,48 +127,11 @@ namespace Lists
                 _back = _back.Next;
             }
 
-            --Size;
+            --Count;
+
+            return value;
         }
 
-        // Time is O(1)
-        public void RemoveAfter(LinkedListNode<T> nextNode)
-        {
-            if (nextNode == null)
-            {
-                throw new ArgumentNullException("nextNode cannot be null");
-            }
-
-            if((nextNode == _front && nextNode == _back) || nextNode == _front)
-            {
-                RemoveBack();
-            }
-            else
-            {
-                nextNode.Previous = nextNode.Previous.Previous;
-                nextNode.Previous.Next = nextNode;
-                --Size;
-            }
-        }
-
-        // Time is O(1)
-        public void RemoveBefore(LinkedListNode<T> previousNode)
-        {
-            if (previousNode == null)
-            {
-                throw new ArgumentNullException("previousNode cannot be null");
-            }
-
-            if ((previousNode == _front && previousNode == _back) || previousNode == _back)
-            {
-                RemoveFront();
-            }
-            else
-            {
-                previousNode.Next = previousNode.Next.Next;
-                previousNode.Next.Previous = previousNode;
-                --Size;
-            }
-        }
 
         // Time is O(n)
         public void Reverse()
@@ -227,31 +149,130 @@ namespace Lists
             _front = next;
         }
 
-        // This searches from the head, so worst-case time is O(n)
-        public LinkedListNode<T> Find(T data)
+        // O(n). Return index of specified item (-1 if it's not found).
+        public int IndexOf(T data)
         {
             if(!IsEmpty)
             {
+                int index = 0;
                 LinkedListNode<T> node = _front;
                 while (node.Previous != null)
                 {
                     if(node.Data.Equals(data))
                     {
-                        return node;
+                        return index;
                     }
                     node = node.Previous;
+                    ++index;
                 }
 
                 if(node.Data.Equals(data))
                 {
-                    return node;
+                    return index;
                 }
             }
 
-            return null;
+            return -1;
         }
 
-        // Time is O(n)
+        // O(n). Get or set value using indexer.
+        public T this[int index]
+        {
+            get { return GetNodeAt(index).Data; }
+
+            set { GetNodeAt(index).Data = value; }
+        }
+
+        // O(1) if removing from front or back, otherwise O(n)
+        public void InsertAt(T data, int index)
+        {
+            if(index < 0 || index > Count)
+            {
+                throw new IndexOutOfRangeException($"{index} is out of range");
+            }
+
+            if(index == 0)
+            {
+                Push(data);
+            }
+            else if(index == Count)
+            {
+                Add(data);
+            }
+            else
+            {
+                var prevNode = GetNodeAt(index);
+                var newNode = new LinkedListNode<T>(data);
+                newNode.Previous = prevNode;
+                newNode.Next = prevNode.Next;
+                prevNode.Next.Previous = newNode;
+                prevNode.Next = newNode;
+
+                ++Count;
+            }
+        }
+
+        // O(n). Removes first occurrence of item.
+        public void Remove(T data)
+        {
+            int index = IndexOf(data);
+            if(index < 0)
+            {
+                return;
+            }
+
+            RemoveAt(index);
+        }
+
+        // O(n). Removes all occurrences of item.
+        public void RemoveAll(T data)
+        {
+            int index = IndexOf(data);
+            while(index > -1)
+            {
+                RemoveAt(index);
+                index = IndexOf(data);
+            }
+        }
+
+        // O(n). Converts LinkedList to an array.
+        public T[] ToArray()
+        {
+            T[] ary = new T[Count];
+            var current = _front;
+            int index = 0;
+            while(current != null)
+            {
+                ary[index++] = current.Data;
+                current = current.Previous;
+            }
+
+            return ary;
+        }
+
+        // O(n). Removes the item at the specified index.
+        public T RemoveAt(int index)
+        {
+            if(index == 0)
+            {
+                return Pop();
+            }
+
+            if(index == Count - 1)
+            {
+                return RemoveLast();
+            }
+
+            var node = GetNodeAt(index);
+            node.Previous.Next = node.Next;
+            node.Next.Previous = node.Previous;
+
+            --Count;
+
+            return node.Data;
+        }
+
+        // O(n). [1,2,3,4] for example.
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -270,6 +291,39 @@ namespace Lists
             sb.Append("]");
 
             return sb.ToString();
+        }
+
+        // O(1) if at front or back of list, otherwise O(n). 
+        // Gets node at the specified index.
+        private LinkedListNode<T> GetNodeAt(int index)
+        {
+            if(_front == null)
+            {
+                throw new Exception("List is empty");
+            }
+
+            if(index < 0 || index > Count - 1)
+            {
+                throw new IndexOutOfRangeException($"{index} is out of range");
+            }
+
+            if(index == 0)
+            {
+                return _front;
+            }
+
+            if(index == Count - 1)
+            {
+                return _back;
+            }
+
+            var node = _front.Previous;
+            for(int idx = 1; idx < index; ++idx)
+            {
+                node = node.Previous;
+            }
+
+            return node;
         }
     }
 }
